@@ -1,5 +1,10 @@
 require "rails_grpc/version"
 
 module RailsGrpc
-  # Your code goes here...
+end
+
+if defined?(Rails)
+  require "rails_grpc/protobuf_extension"
+  require "rails_grpc/grpc_extension"
+  require "rails_grpc/loader"
 end

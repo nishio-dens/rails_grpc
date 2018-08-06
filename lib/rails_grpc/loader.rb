@@ -10,7 +10,7 @@ module RailsGrpc
     @@loaded_services = []
 
     ActiveSupport.on_load(:before_initialize) do
-      Rails.application.config.to_prepare do
+      ::Rails.application.config.to_prepare do
         RailsGrpc::Loader.prepare
       end
     end
@@ -30,7 +30,7 @@ module RailsGrpc
     end
 
     def self.grpc_libs
-      "#{Rails.root}#{@@grpc_proto_lib_dir}"
+      "#{::Rails.root}#{@@grpc_proto_lib_dir}"
     end
 
     def self.proto_files

@@ -10,9 +10,10 @@ module RailsGrpc
     @@loaded_services = []
 
     ActiveSupport.on_load(:before_initialize) do
-      ::Rails.application.config.to_prepare do
-        RailsGrpc::Loader.prepare
-      end
+      RailsGrpc::Loader.prepare
+    end
+    ActiveSupport::Reloader.to_complete do
+      RailsGrpc::Loader.prepare
     end
 
     def self.prepare
@@ -39,37 +40,27 @@ module RailsGrpc
 
     def self.load_services
       proto_files.select { |t| t.include?("_services_pb.rb") }.each do |file|
-        load file
+        self.load_and_watch(file)
       end
     end
 
     def self.load_definitions
       proto_files.reject { |t| t.include?("_services_pb.rb") }.each do |file|
-        load file
+        self.load_and_watch(file)
       end
+    end
+
+    def self.load_and_watch(file)
+      # TODO: dir
+      ::Rails.application.config.watchable_files.concat [file] # FIXME: dup entry
+
+      # FIXME
+      ActiveSupport::Dependencies.require_or_load(file, "Ec::Product".to_sym)
     end
 
     def self.clear_grpc_classes
-      @@loaded_classes.uniq.each { |klass| clear_class(klass) }
-      @@loaded_services.uniq.each do |klass|
-        stub_class = "#{klass.constantize.parent}::Stub"
-        if defined?(stub_class)
-          clear_class(stub_class)
-        end
-        clear_class(klass)
-      end
-
       RailsGrpc::Loader.clear_loaded_classes
       RailsGrpc::Loader.clear_loaded_services
-    end
-
-    def self.clear_class(klass)
-      if defined?(klass)
-        klass.constantize.parent.class_eval do
-          k = klass.split("::")[-1]
-          remove_const(k.to_sym)
-        end
-      end
     end
 
     def self.add_loaded_class(klass)

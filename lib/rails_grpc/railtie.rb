@@ -1,5 +1,6 @@
 require "rails"
 require "rails_grpc/dependencies"
+require "rails_grpc/reloader"
 require "google/protobuf"
 
 module RailsGrpc
@@ -13,11 +14,7 @@ module RailsGrpc
     end
 
     ActiveSupport::Reloader.to_complete do
-      unless RailsGrpc::Dependencies.cache_classes?
-        Google::Protobuf::DescriptorPool.generated_pool.clear
-        RailsGrpc::Dependencies.clear_dependencies!
-        RailsGrpc::Dependencies.load_dependencies!
-      end
+      RailsGrpc::Reloader.reload!
     end
   end
 end

@@ -2,6 +2,12 @@
 
 gRPC for Ruby on Rails
 
+## Feature
+
+- Add Autoreload protobuf definition feature in development mode
+- Grpc Rails Server
+- Add some useful grcp function
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -17,6 +23,114 @@ And then execute:
 Or install it yourself as:
 
     $ gem install rails_grpc
+
+
+## Directory Structure
+
+### /proto
+
+You need to put the protobuf definition in Rails.root/proto dir.
+
+```
+$ tree proto
+proto
+├── ec.deep.proto
+├── ec.proto
+└── other.proto
+```
+
+### /grpc
+
+You need to be careful about the location of grpc service, lib, and model files.
+
+```
+# current working dir is Rails.root
+
+$ tree grpc
+
+grpc
+├── lib
+│   ├── ec.deep_pb.rb
+│   ├── ec.deep_services_pb.rb
+│   ├── ec_pb.rb
+│   ├── ec_services_pb.rb
+│   └── other_pb.rb
+├── models
+│   └── ec
+│       └── product.rb
+└── services
+    └── product_service.rb
+```
+
+lib files is the protobuf autogenerate files.
+
+models is a models that you want to extend protobuf models.
+
+services is the protobuf service files.
+
+```
+#### example models
+
+```
+# grpc/models/ec/product.rb
+
+# You can extend Ec::Product models
+class Ec::Product
+  PORT = "127.0.0.1:8080"
+
+  def self.all
+    service = Ec::ProductService::Stub.new(PORT, :this_channel_is_insecure)
+    req = Ec::GetProductsRequest.new
+    res = service.get_products(req)
+
+    res.products
+  end
+
+  def self.find(id)
+    service = Ec::ProductService::Stub.new(PORT, :this_channel_is_insecure)
+    req = Ec::GetByProductIdRequest.new(product_id: id)
+    res = service.get_by_product_id(req)
+
+    res.product
+  end
+end
+```
+
+### example services
+
+```
+# grpc/services/product_service.rb
+
+module Grpc
+  class ProductService < Ec::ProductService::Service
+    def get_products(req, _call)
+      products = Product.all
+      Ec::GetProductsResponse.new(products: products.map(&:to_proto))
+    end
+
+    def get_by_product_id(req, _call)
+      product = Product.find_by(id: req.product_id)
+      if product.present?
+        Ec::GetByProductIdResponse.new(product: product.to_proto)
+      else
+        fail GRPC::BadStatus.new_status_exception(
+          GRPC::Core::StatusCodes::ABORTED,
+          "product #{req.product_id} not found"
+        )
+      end
+    end
+  end
+end
+```
+
+
+## Compile Protoc
+
+First, you put protobuf definition in /proto dir, and you need to run compile command.
+
+```
+bundle exec rake protoc:compile
+```
 
 ## Development
 

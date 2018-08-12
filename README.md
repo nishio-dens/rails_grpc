@@ -68,8 +68,8 @@ models is a models that you want to extend protobuf models.
 
 services is the protobuf service files.
 
-```
-#### example models
+
+### example models
 
 ```
 # grpc/models/ec/product.rb
@@ -99,7 +99,7 @@ end
 ### example services
 
 ```
-# grpc/services/product_service.rb
+# grpc/services/product\_service.rb
 
 module Grpc
   class ProductService < Ec::ProductService::Service

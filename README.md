@@ -14,16 +14,12 @@ Add this line to your application's Gemfile:
 
 ```ruby
 gem 'rails_grpc'
+gem "google-protobuf", git: "git@github.com:nishio-dens/protobuf.git", branch: "rails-grpc", glob: "ruby/google-protobuf.gemspec"
 ```
 
 And then execute:
 
     $ bundle
-
-Or install it yourself as:
-
-    $ gem install rails_grpc
-
 
 ## Directory Structure
 

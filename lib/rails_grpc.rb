@@ -4,8 +4,7 @@ module RailsGrpc
 end
 
 if defined?(Rails)
-  require "rails_grpc/protobuf_extension"
-  require "rails_grpc/grpc_extension"
-  require "rails_grpc/loader"
-  require "rails_grpc/rails"
+  require "rails_grpc/dependencies"
+  require "rails_grpc/reloader"
+  require "rails_grpc/railtie"
 end

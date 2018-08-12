@@ -11,12 +11,16 @@ namespace :protoc do
     File.join(Rails.root, "proto")
   end
 
+  def grpc_path
+    File.join(Rails.root, "grpc")
+  end
+
   def ruby_out
-    File.join(Rails.root, "proto/lib")
+    File.join(grpc_path, "lib")
   end
 
   def grpc_out
-    File.join(Rails.root, "proto/lib")
+    ruby_out
   end
 
   def grpc_ruby_plugin_path
@@ -38,7 +42,7 @@ protoc -I #{proto_path} --ruby_out=#{ruby_out} --grpc_out=#{grpc_out} \
   end
 
   def grpc_out_ruby_files
-    Dir.glob(File.join(Rails.root, "proto/lib/**/*.rb"))
+    Dir.glob(File.join(ruby_out, "**/*.rb"))
   end
 
   # FIXME:

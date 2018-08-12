@@ -1,14 +1,4 @@
 GIT
-  remote: git@github.com:nishio-dens/grpc.git
-  revision: 6975fe484cf17bf056b1f8e2daf23899a0378083
-  branch: rails-grpc
-  submodules: true
-  specs:
-    grpc (1.15.0.dev)
-      google-protobuf (~> 3.1)
-      googleapis-common-protos-types (~> 1.0.0)
-
-GIT
   remote: git@github.com:nishio-dens/protobuf.git
   revision: b4f6ee826ddd98e96e29ceef586843e8e219bca0
   branch: rails-grpc
@@ -77,8 +67,11 @@ GEM
     erubi (1.7.1)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    googleapis-common-protos-types (1.0.1)
+    googleapis-common-protos-types (1.0.2)
       google-protobuf (~> 3.0)
+    grpc (1.14.1)
+      google-protobuf (~> 3.1)
+      googleapis-common-protos-types (~> 1.0.0)
     i18n (1.0.1)
       concurrent-ruby (~> 1.0)
     loofah (2.2.2)
@@ -171,7 +164,6 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.16)
   google-protobuf!
-  grpc!
   pry
   pry-doc
   rails_grpc!

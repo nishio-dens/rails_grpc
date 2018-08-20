@@ -55,7 +55,10 @@ protoc -I #{proto_path} --ruby_out=#{ruby_out} --grpc_out=#{grpc_out} \
       name.end_with?("_pb.rb") && name.include?("_services_")
     end
     service_files.each do |path|
-      source = open(path).read.split("\n").reject { |line| line =~ /^require / }.join("\n")
+      source = open(path)
+        .read
+        .split("\n")
+        .reject { |line| line =~ /^require / && !line.include?("grpc") }.join("\n")
       open(path, "w") do |f|
         f.write source
       end

@@ -63,5 +63,19 @@ protoc -I #{proto_path} --ruby_out=#{ruby_out} --grpc_out=#{grpc_out} \
         f.write source
       end
     end
+
+    without_service_files = grpc_out_ruby_files.select do |v|
+      name = File.basename(v)
+      name.end_with?("_pb.rb") && !name.include?("_services_")
+    end
+    without_service_files.each do |path|
+      source = open(path)
+        .read
+        .split("\n")
+        .reject { |line| line =~ /^require / && !line.include?("google/protobuf") }.join("\n")
+      open(path, "w") do |f|
+        f.write source
+      end
+    end
   end
 end

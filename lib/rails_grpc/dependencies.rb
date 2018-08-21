@@ -75,12 +75,12 @@ module RailsGrpc
       end
 
       def load_and_watch(file_path, const_name)
-        watch_file_and_dir(file_path) if self.cache_classes?
+        watch_file_and_dir(file_path) unless self.cache_classes?
 
         ActiveSupport::Dependencies.require_or_load(file_path, const_name.to_sym)
       end
 
-      def watch_file_and_dir(filepath)
+      def watch_file_and_dir(file_path)
         dir_path = File.dirname(file_path)
 
         ::Rails.application.config.watchable_dirs[dir_path] = [:rb]

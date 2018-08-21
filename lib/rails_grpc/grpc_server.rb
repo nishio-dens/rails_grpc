@@ -5,11 +5,15 @@ require "rails_grpc/interceptor/logging_interceptor"
 # TODO: Autoreload
 module RailsGrpc
   class GeneralServer
-    attr_accessor :port, :pool_size
+    attr_accessor :port, :pool_size, :logger
 
-    def initialize(port:, pool_size: nil)
+    def initialize(port:, pool_size: nil, logger: Rails.logger)
+      self.port = port
+      self.pool_size = pool_size
+      self.logger = logger
+
       @interceptors = [
-        RailsGrpc::Interceptor::LoggingInterceptor.new
+        RailsGrpc::Interceptor::LoggingInterceptor.new(RailsGrpc::Logger.logger(logger))
       ]
 
       @grpc_server = if pool_size.present?
@@ -28,6 +32,7 @@ module RailsGrpc
     end
 
     def run
+      @logger.info("GRPC server running on #{port}")
       @grpc_server.run_till_terminated
     end
   end

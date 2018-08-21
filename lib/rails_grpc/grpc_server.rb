@@ -33,7 +33,14 @@ module RailsGrpc
 
     def run
       @logger.info("GRPC server running on #{port}")
-      @grpc_server.run_till_terminated
+      begin
+        @grpc_server.run_till_terminated
+      rescue SystemExit, Interrupt
+        # server does not stop gracefully because of it is a bug of grpc ruby.
+        # see: https://github.com/grpc/grpc/issues/14043
+        @logger.info("GRPC server goodbye!")
+        @grpc_server.stop
+      end
     end
   end
 end

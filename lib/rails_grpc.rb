@@ -1,17 +1,16 @@
 require "rails_grpc/version"
 
 module RailsGrpc
-end
-
-if defined?(Rails)
+  # required
   require "rails_grpc/dependencies"
-  require "rails_grpc/reloader"
-
-  require "rails_grpc/extension/rpc_server"
-
+  require "rails_grpc/railtie"
   require "rails_grpc/logger"
   require "rails_grpc/interceptor/logging_interceptor"
-  require "rails_grpc/general_server"
 
-  require "rails_grpc/railtie"
+  # extension
+  require "rails_grpc/extension/rpc_server"
+
+  # options
+  autoload :Reloader, "rails_grpc/reloader"
+  autoload :GeneralServer, "rails_grpc/general_server"
 end

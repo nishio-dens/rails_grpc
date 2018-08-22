@@ -1,5 +1,4 @@
 require "grpc"
-require "rails"
 require "rails_grpc/interceptor/logging_interceptor"
 require "rails_grpc/dependencies"
 

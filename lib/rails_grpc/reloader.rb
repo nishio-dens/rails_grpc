@@ -1,4 +1,3 @@
-require "rails"
 require "rails_grpc/dependencies"
 
 module RailsGrpc

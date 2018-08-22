@@ -4,7 +4,11 @@ require "rails_grpc/dependencies"
 
 module RailsGrpc
   class GeneralServer
-    attr_accessor :port, :pool_size, :logger, :grpc_server, :handlers, :interceptors
+    attr_accessor :port, :logger, :grpc_server, :handlers, :interceptors
+
+    # When you would like to use autoreload in development mode,
+    # pool_size > 1 reloading is so slow, so you should set pool_size 1.
+    attr_accessor :pool_size
 
     def initialize(port:, pool_size: nil, logger: Rails.logger)
       self.port = port

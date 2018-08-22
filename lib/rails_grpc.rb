@@ -11,7 +11,7 @@ if defined?(Rails)
 
   require "rails_grpc/logger"
   require "rails_grpc/interceptor/logging_interceptor"
-  require "rails_grpc/grpc_server"
+  require "rails_grpc/general_server"
 
   require "rails_grpc/railtie"
 end

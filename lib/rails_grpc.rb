@@ -13,4 +13,5 @@ module RailsGrpc
   # options
   autoload :Reloader, "rails_grpc/reloader"
   autoload :GeneralServer, "rails_grpc/general_server"
+  autoload :RackReloader, "rails_grpc/rack_reloader"
 end

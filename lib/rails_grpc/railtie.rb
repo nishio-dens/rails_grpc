@@ -1,4 +1,3 @@
-require "rails"
 require "rails_grpc/dependencies"
 require "rails_grpc/reloader"
 require "google/protobuf"

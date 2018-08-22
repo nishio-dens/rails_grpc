@@ -1,5 +1,3 @@
-require "rails"
-
 module RailsGrpc
   module Dependencies
     mattr_accessor :proto_lib_dir

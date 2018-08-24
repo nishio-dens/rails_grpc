@@ -19,9 +19,10 @@ module RailsGrpc
       end
 
       def find_proto_message_definitions
-        find_proto_lib_files.reject do |t|
+        messages = find_proto_lib_files.reject do |t|
           File.basename(t).include?("_services_pb.rb")
         end
+        messages.sort_by { |m| m.include?("_model_pb.rb") ? 0 : 1 } # FIXME: temporary patch to load model first
       end
 
       def find_proto_service_definitions

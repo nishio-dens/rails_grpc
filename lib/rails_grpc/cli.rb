@@ -9,7 +9,7 @@ module RailsGrpc
     WORKER_LAUNCH_RETRY_LIMIT = 3
     GRPC_DEFAULT_PORT = "127.0.0.1:5050"
     GRPC_DEFAULT_POOL_SIZE = 1
-    RAILS_LAUNCH_WAIT_TIME = 5 # FIXME
+    RAILS_LAUNCH_WAIT_TIME = 10 # FIXME
 
     attr_accessor :worker_pid, :server, :mutex
 

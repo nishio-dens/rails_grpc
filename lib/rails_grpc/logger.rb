@@ -10,6 +10,7 @@ module RailsGrpc
 
         if Rails.env.development? || Rails.env.test?
           std_logger = ActiveSupport::Logger.new(STDOUT)
+          std_logger.formatter = ActiveSupport::Logger::Formatter.new
           multiple_loggers = ActiveSupport::Logger.broadcast(std_logger)
           original_logger.extend(multiple_loggers)
         end

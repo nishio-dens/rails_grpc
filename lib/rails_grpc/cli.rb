@@ -70,7 +70,7 @@ module RailsGrpc
     def launch_new_worker
       new_worker_pid = Process.fork
       if new_worker_pid
-        puts "master waiting child: #{new_worker_pid} and kill old #{@worker_pid}"
+        puts "Launch new worker process (pid: #{new_worker_pid}) and kill old worker (pid:#{@worker_pid})"
         retry_limit = WORKER_LAUNCH_RETRY_LIMIT
 
         # FIXME: ugly code

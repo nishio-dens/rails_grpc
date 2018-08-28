@@ -16,8 +16,8 @@ module RailsGrpc
         begin
           yield
         rescue => e
-          logger.warn(e)
-          logger.warn(e.backtrace.join("\n"))
+          logger.error(e)
+          logger.error(e.backtrace.join("\n"))
           raise e
         end
 

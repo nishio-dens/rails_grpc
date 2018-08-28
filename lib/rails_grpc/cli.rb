@@ -68,12 +68,13 @@ module RailsGrpc
     end
 
     def config
-      @_config ||= config_file
+      @_config ||= load_config_file
     end
 
-    def config_file
+    def load_config_file
       if File.exist?(GRPC_CONFIG_PATH)
-        YAML.load_file(GRPC_CONFIG_PATH)
+        require 'erb'
+        YAML.load(ERB.new(IO.read(GRPC_CONFIG_PATH)).result)
       else
         puts "config/grpc.yml file not found."
         exit 1

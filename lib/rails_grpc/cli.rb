@@ -1,14 +1,11 @@
 require "singleton"
+require "rails_grpc/boot"
 
 module RailsGrpc
   class CLI
     include Singleton
 
-    RAILS_BOOT_PATH  = "config/environment.rb"
-    GRPC_CONFIG_PATH = "config/grpc.yml"
     WORKER_LAUNCH_RETRY_LIMIT = 3
-    GRPC_DEFAULT_PORT = "127.0.0.1:5050"
-    GRPC_DEFAULT_POOL_SIZE = 1
     RAILS_LAUNCH_WAIT_TIME = 10 # FIXME
 
     attr_accessor :worker_pid, :server, :mutex
@@ -49,36 +46,13 @@ module RailsGrpc
     end
 
     def boot_grpc_server
-      require File.expand_path(RAILS_BOOT_PATH) # Load rails
-      require "rails_grpc/general_server"
-
-      c = config[environment]
-      @server = RailsGrpc::GeneralServer.new(
-        port: c["server"]["port"] || GRPC_DEFAULT_PORT,
-        pool_size: c["server"]["pool_size"] || GRPC_DEFAULT_POOL_SIZE
-      )
-      @server.set_handlers(c["handlers"].map(&:constantize))
-      @server.run
+      RailsGrpc::Boot.new.exec(environment)
     end
 
     def print_banner
       puts "\e[#{31}m==================================================="
       puts "                  Rails GRPC                       "
       puts "===================================================\e[0m"
-    end
-
-    def config
-      @_config ||= load_config_file
-    end
-
-    def load_config_file
-      if File.exist?(GRPC_CONFIG_PATH)
-        require 'erb'
-        YAML.load(ERB.new(IO.read(GRPC_CONFIG_PATH)).result)
-      else
-        puts "config/grpc.yml file not found."
-        exit 1
-      end
     end
 
     def set_master_trap

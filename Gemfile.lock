@@ -9,7 +9,7 @@ GIT
 PATH
   remote: .
   specs:
-    rails_grpc (0.1.1)
+    rails_grpc (0.1.2)
       grpc
       protobuf
       rails

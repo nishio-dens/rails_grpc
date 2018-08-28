@@ -13,7 +13,13 @@ module RailsGrpc
         logger.info("[GRPC] #{grpc_method}")
         t = Time.now
 
-        yield
+        begin
+          yield
+        rescue => e
+          logger.warn(e)
+          logger.warn(e.backtrace.join("\n"))
+          raise e
+        end
 
         t = Time.now - t
         display_duration = "%.1f ms" % (t * 1000.0)
